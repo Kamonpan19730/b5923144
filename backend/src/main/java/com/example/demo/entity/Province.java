@@ -19,7 +19,7 @@ public class Province {
       
   @Id
   @SequenceGenerator(name="province_seq",sequenceName="province_seq")               
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gategory_seq")  
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="province_seq")  
   @Column(name = "province_ID", unique = true, nullable = true)
   private @NonNull Long provinceid;
   private @NonNull String province;
