@@ -19,7 +19,7 @@ public class Prefix {
       
   @Id
   @SequenceGenerator(name="prefix_seq",sequenceName="prefix_seq")               
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gategory_seq")  
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="prefix_seq")  
   @Column(name = "prefix_ID", unique = true, nullable = true)
   private @NonNull Long prefixid;
   private @NonNull String prefix;

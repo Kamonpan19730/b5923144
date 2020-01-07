@@ -51,11 +51,11 @@ public class MemberController {
 
     }
 
-        @PostMapping("/addmember/{prefixid}/{name}/{idcard}/{provinceid}/{memtypeid}")
+        @PostMapping("/member/{prefixid}/{name}/{idcard}/{provinceid}/{memtypeid}") //can't save bcz on script on vue page is addmember
         public Member newMember(Member newMember,
                                   @PathVariable long prefixid,
                                   @PathVariable String name,
-                                  @PathVariable int idcard,
+                                  @PathVariable String idcard,
                                   @PathVariable long provinceid,
                                   @PathVariable long memtypeid) {
 

@@ -18,17 +18,20 @@ public class Member {
 
     private @NonNull Long memberid;
     private @NonNull String name;
-    private @NonNull int idcard;
+    private @NonNull String idcard;  //Not interger bcz not space for 13 number
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Province.class)
-    @JoinColumn(name = "Province_ID")
+    @JoinColumn(name = "Province_ID", insertable = true)
+    //@JoinColumn(name = "Province_ID")
     private Province province;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Prefix.class)
-    @JoinColumn(name = "Prefix_ID")
+    @JoinColumn(name = "Prefix_ID", insertable = true)
+  //  @JoinColumn(name = "Prefix_ID")
     private Prefix prefix;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Memtype.class)
-    @JoinColumn(name = "Memtype_ID")
+    @JoinColumn(name = "Memtype_ID", insertable = true)
+    //@JoinColumn(name = "Memtype_ID")
     private Memtype memtype;
 }

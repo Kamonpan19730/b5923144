@@ -19,8 +19,9 @@ public class Memtype {
       
   @Id
   @SequenceGenerator(name="memtype_seq",sequenceName="memtype_seq")               
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="gategory_seq")  
-  @Column(name = "memtype_ID", unique = true, nullable = true)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="memtype_seq")  
+  @Column(unique = true)
+  //@Column(name = "memtype_ID", unique = true, nullable = true)
   private @NonNull Long memtypeid;
   private @NonNull String memtype;
 
