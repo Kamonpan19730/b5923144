@@ -24,7 +24,7 @@ import com.example.demo.entity.Category;;
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")
 
-class VideoController {
+public class VideoController {
     @Autowired
     private final VideoRepository videoRepository;
 

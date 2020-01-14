@@ -1,38 +1,26 @@
 <template>
   <v-app>
-    <v-app-bar
-      app
-      class="teal accent-2"
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <v-app-bar app color="blue darken-2" dark>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-toolbar-title>ระบบห้องสมุด</v-toolbar-title>
+        <div class="flex-grow-1"></div>
 
-        <span>ระบบให้คะแนนการใช้งาน</span>
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://www.facebook.com/inexact"
-        target="_blank"
-        text
-      >
-        <span>Contact Me</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
+      <v-toolbar-items>
+        
+        <v-btn text to="/rates">ให้คะแนน</v-btn>
+        <v-btn text to="/Member">สมาชิก</v-btn>
+        <v-btn text to="/addVideo">เพิ่มวิดีโอ</v-btn>
+        <v-btn text to="/AddBook">เพิ่มหนังสือ</v-btn>
+        <v-btn text to="/borrow">ยืมหนังสือ</v-btn>
+        <v-btn text to="/remand">คืนหนังสือ</v-btn>
+        
+      </v-toolbar-items>
     </v-app-bar>
 
     <v-content>
-       <router-view />
+      
+      <router-view />
     </v-content>
-    
   </v-app>
 </template>
 

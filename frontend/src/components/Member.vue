@@ -2,32 +2,32 @@
 
     <center>
       <v-form v-model="valid" ref="form"> 
-        
+          <v-card class="mx-auto" max-width="100%">
                  <v-row>
                     <v-col>
-                    <v-app-bar app >
-                      <v-toolbar
-                        dark
-                        prominent
-                        src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
-                      <v-toolbar-title class="headline text-uppercase">
-                        <span>ระบบลงทะเบียนสมาชิก</span>
-                      </v-toolbar-title>
-                       </v-toolbar>
-                    </v-app-bar>
+                      
+                   
+                     <v-card color="basil">
+                    <v-card-title class="text-center justify-center py-6">
+                   <h1 class="font-weight display-1 basil--text">ระบบลงทะเบียนสมาชิก</h1>
+                   </v-card-title>
+                   </v-card>  
+                    
+
                     </v-col>
                   </v-row>
                
 
-
+<v-card-text>
                     <v-row>
-                        <v-col>
+                         <v-col cols="12">
                         <v-select
                             label="โปรดเลือกคำนำหน้า"
                             outlined
 
                             v-model="Member.prefixid"
                             :items="prefix"
+                                   :rules="[v=> !!v || 'โปรดเลือกคำนำหน้า']"
                             item-text="prefix"   
                             item-value="prefixid"
                         
@@ -41,6 +41,7 @@
                     <v-row>
                         <v-col>
                             <v-text-field
+                            
                                 label="ชื่อ-นามสกุล"
                                 hint="กรอกชื่อ-นามสกุล"
 
@@ -71,6 +72,7 @@
 
                             v-model="Member.provinceid"
                             :items="province"
+                            :rules="[v=> !!v || 'โปรดเลือกจังหวัด']"
                             item-text="province"   
                             item-value="provinceid"
                         
@@ -88,6 +90,7 @@
 
                             v-model="Member.memtypeid"
                             :items="memtype"
+                            :rules="[v=> !!v || 'โปรดเลือกประเภทสมาชิก']"
                             item-text="memtype"   
                             item-value="memtypeid"
                         
@@ -98,7 +101,7 @@
                     
                     
                  
-
+</v-card-text>
 
                     <v-row justify="center">
                         <v-col cols="12">
@@ -107,6 +110,7 @@
                             
                         </v-col>
                         </v-row>
+                    </v-card>    
       </v-form>
    </center>
     
@@ -232,12 +236,19 @@ methods: {
   }
 
   .v-form {
-      width: 400px;
+      width: 55%;
       background-color:rgb(250, 250, 250)
     }
     
   .v-btn{
-      background-color:rgba(255, 255, 255)
+      background-color:rgba(250, 250, 250)
   }
+
+.basil {
+  background-color: rgb(69, 91, 219) !important;
+}
+.basil--text {
+  color: #edf5f2 !important;
+}
 </style>
 
