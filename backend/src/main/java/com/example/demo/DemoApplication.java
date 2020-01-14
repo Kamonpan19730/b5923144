@@ -2,11 +2,15 @@ package com.example.demo;
 
 import com.example.demo.repository.LibrarianRepository;
 import com.example.demo.repository.*;
+import com.example.demo.repository.BookTypeRepository;
+import com.example.demo.repository.LanguageRepository;
+
 import com.example.demo.repository.MemtypeRepository;
 import com.example.demo.repository.TypeRepository;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.entity.*;
 import com.example.demo.entity.Type;
+import com.example.demo.entity.Number;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Librarian;
 
@@ -24,24 +28,16 @@ public class DemoApplication {
 	}
 
 	@Bean
-	ApplicationRunner init(TypeRepository typeRepository, CategoryRepository categoryRepository, LibrarianRepository librarianRepository,
-						MemberRepository memberRepository,
+	ApplicationRunner init(MemberRepository memberRepository,
 						MemtypeRepository memtypeRepository,
 						PrefixRepository prefixRepository,
-						ProvinceRepository provinceRepository) {
+						ProvinceRepository provinceRepository,
+						BookTypeRepository booktypeRepository,
+						LanguageRepository languageRepository,
+						NumberRepository numberRepository,
+						BookStatusRepository bookStatusRepository){
 	
 		return args -> {
-			Stream.of("AAA").forEach(type -> {
-				Type types = new Type();
-				types.setType(type);
-				typeRepository.save(types);
-			});
-
-			Stream.of("SSSS").forEach(category -> {
-				Category categorys = new Category();
-				categorys.setCategory(category);
-				categoryRepository.save(categorys);
-			});
 
 			Stream.of("กระบี่","กรุงเทพมหานคร","กาญจนบุรี","กาฬสินธุ์","กำแพงเพชร","ขอนแก่น","จันทบุรี","ฉะเชิงเทรา" ,"ชลบุรี",
 			"ชัยนาท","ชัยภูมิ","ชุมพร","เชียงราย","เชียงใหม่","ตรัง","ตราด","ตาก","นครนายก","นครปฐม","นครพนม",
@@ -69,9 +65,46 @@ public class DemoApplication {
 		memtypee.setMemtype(memtpye);
 		memtypeRepository.save(memtypee);
 	});
+    Stream.of("นิทาน", "การ์ตูน", 
+                  "สารคดี", "ประวัติศาสตร์", 
+                  "ความรู้ทั่วไป", "นิยาย","วารสาร","นิตยสาร","วิทยาศาสตร์","สังคมศาสตร์")
+                    .forEach(booktypeName -> {
+                    BookType booktype = new BookType();
+                    booktype.setBookTypeName(booktypeName);
+                    booktypeRepository.save(booktype);
+});
+        
+        Stream.of("ภาษาไทย", "ภาษาอังกฤษ" ,
+                  "ภาษาญี่ปุ่น", "ภาษาจีน" , 
+                  "ภาษาฝรั่งเศษ", "ภาษาฟิลิปปินส์" , 
+                  "ภาษาเวียดนาม","ภาษาเกาหลี","ภาษาอาหรับ","ภาษาอื่นๆ")
+                    .forEach(languageName -> {
+                    Language language = new Language(); 
+                    language.setLanguageName(languageName); 
+                    languageRepository.save(language); 
+        });
+
+        Stream.of("1 เล่ม", "2 เล่ม", 
+                  "3 เล่ม", "4 เล่ม", 
+                  "5 เล่ม", "6 เล่ม", 
+				  "7 เล่ม", "8 เล่ม",
+				  "9 เล่ม ","10 เล่ม",
+				  "11 เล่ม" ,"12 เล่ม" ,
+				  "13 เล่ม" ,"14 เล่ม" ,
+				  "15 เล่ม"  )
+                  .forEach(numberName -> {
+                  Number number = new Number();
+                  number.setNumberName(numberName);
+                  numberRepository.save(number);
+        });
 
 
-
+		Stream.of("สมบูรณ์ 100 %" , "ฉีกขาดบางหน้า" , "ฉีกขาดหลายหน้า" , "ชำรุดหนัก" , "สูญหาย")
+			.forEach(bookStatusName -> {
+			BookStatus bookStatus = new BookStatus();
+			bookStatus.setBookStatusName(bookStatusName);
+			bookStatusRepository.save(bookStatus);
+		});
 
 		};
 	}
