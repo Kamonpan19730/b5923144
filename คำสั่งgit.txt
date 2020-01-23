@@ -1,0 +1,30 @@
+
+git pull origin master
+
+git checkout -b issue-11 master
+
+git add .
+
+git commit -m "เพิ่มตัวอย่าง test - close #11"
+
+...
+
+git checkout master
+
+git remote update
+
+git pull origin master
+
+.
+git checkout issue-11
+git rebase master
+
+.
+git checkout master
+git merge issue-11 --no-ff
+                                :wq
+git push origin master
+
+
+
+
