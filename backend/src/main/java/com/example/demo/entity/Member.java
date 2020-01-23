@@ -34,4 +34,8 @@ public class Member {
     @JoinColumn(name = "Memtype_ID", insertable = true)
     //@JoinColumn(name = "Memtype_ID")
     private Memtype memtype;
+
+	public static Object builder() {
+		return null;
+	}
 }

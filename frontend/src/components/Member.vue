@@ -22,7 +22,7 @@
                     <v-row>
                          <v-col cols="12">
                         <v-select
-                            label="โปรดเลือกคำนำหน้า"
+                            label="เลือกคำนำหน้า"
                             outlined
 
                             v-model="Member.prefixid"
@@ -47,6 +47,7 @@
 
                                 required
                                 v-model="Member.name"
+                                 :rules="[(v) => !!v || 'กรุณากรอกชื่อ-นามสกุล']"
                             ></v-text-field>
                             </v-col>
                     </v-row>
@@ -60,6 +61,7 @@
 
                                 required
                                 v-model="Member.idcard"
+                                 :rules="[(v) => !!v || 'กรุณากรอกเลขประจำตัวบัตรประชาชน 13 หลัก']"
                             ></v-text-field>
                             </v-col>
                     </v-row>
@@ -67,7 +69,7 @@
                     <v-row>
                         <v-col>
                         <v-select
-                            label="โปรดเลือกจังหวัด"
+                            label="เลือกจังหวัด"
                             outlined
 
                             v-model="Member.provinceid"
@@ -85,7 +87,7 @@
                    <v-row>
                         <v-col>
                         <v-select
-                            label="โปรดเลือกประเภทสมาชิก"
+                            label="เลือกประเภทสมาชิก"
                             outlined
 
                             v-model="Member.memtypeid"
@@ -103,15 +105,27 @@
                  
 </v-card-text>
 
-                    <v-row justify="center">
-                        <v-col cols="12">
-                            <v-btn @click="saveMember" :class="{ yellow: !valid, green: valid }" color="primary">บันทึกข้อมูล</v-btn>&nbsp;&nbsp;&nbsp;
-                            
-                            
-                        </v-col>
-                        </v-row>
-                    </v-card>    
+                
+                <v-card-actions>
+                  
+                    <v-btn @click="saveMember" :class="{ yellow: !valid, green: valid }" color="primary">บันทึกข้อมูล</v-btn>&nbsp;&nbsp;&nbsp;
+                       
+                        <v-spacer></v-spacer>
+
+                    <v-btn color="error" to="/ShowMember">แสดงรายชื่อผู้ลงทะเบียนสมาชิก</v-btn>
+                    
+              </v-card-actions>
+                  
+                  
+                  
+                    </v-card> 
+
+                     
       </v-form>
+    <v-snackbar v-model="snackbar">
+                  {{ text }}
+                  <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
+                </v-snackbar>
    </center>
     
 </template>
@@ -133,11 +147,9 @@
         idcard: "",
         provinceid: "",
         memtypeid: "",
-        
-        active: false
-        },
-        submitted: false,
-        valid: false,
+      },
+       snaktr: false,
+        text: ""
     };
   },
 methods: {
@@ -201,19 +213,15 @@ methods: {
         )
     .then(response => {
           console.log(response);
-          if(response = true){
-            alert('บันทึกข้อมูลเสร็จสิ้น')
-          } 
-          this.$refs.form.reset();
-       //   this.customerCheck = false;
+          this.text = "เพิ่มข้อมูลสำเร็จ"
+          this.snackbar = !this.snackbar  
         })
-        .catch(e => {
+       .catch(e => {
           console.log(e);
-           if(e = false){
-            alert('การบันทึกข้อมูลผิดพลาด')
-          }
-        });
-      
+          this.text = "ไม่สามารถเพิ่มข้อมูลได้"
+          this.snackbar = !this.snackbar
+        })
+      this.submitted = true;
      
     },
    
@@ -241,7 +249,7 @@ methods: {
     }
     
   .v-btn{
-      background-color:rgba(250, 250, 250)
+      background-color:rgb(8, 8, 8)
   }
 
 .basil {

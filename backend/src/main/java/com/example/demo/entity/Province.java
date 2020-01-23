@@ -23,5 +23,8 @@ public class Province {
   @Column(name = "province_ID", unique = true, nullable = true)
   private @NonNull Long provinceid;
   private @NonNull String province;
+public static Object builder() {
+	return null;
+}
 
 }
