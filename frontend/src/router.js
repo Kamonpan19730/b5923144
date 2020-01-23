@@ -8,6 +8,7 @@ import AddBook from './components/AddBook'
 import borrow from './components/borrow'
 
 import Remand from './components/Remand'
+import ShowMember from './components/ShowMember'
 
 Vue.use(VueRouter)
 
@@ -48,6 +49,10 @@ const router = new VueRouter({
                 {
                     path: 'AddBook',
                     component: AddBook
+                },
+                {
+                    path: 'ShowMember',
+                    component: ShowMember,
                 }
 
             ]

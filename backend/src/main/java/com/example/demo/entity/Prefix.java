@@ -23,5 +23,8 @@ public class Prefix {
   @Column(name = "prefix_ID", unique = true, nullable = true)
   private @NonNull Long prefixid;
   private @NonNull String prefix;
+public static Object builder() {
+	return null;
+}
 
 }

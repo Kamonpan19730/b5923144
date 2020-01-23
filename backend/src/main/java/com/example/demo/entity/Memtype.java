@@ -24,5 +24,8 @@ public class Memtype {
   //@Column(name = "memtype_ID", unique = true, nullable = true)
   private @NonNull Long memtypeid;
   private @NonNull String memtype;
+public static Object builder() {
+	return null;
+}
 
 }
