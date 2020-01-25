@@ -48,8 +48,8 @@ public class MemberController {
     @GetMapping("/member")   
     public Collection<Member> Member() {
         return memberRepository.findAll().stream().collect(Collectors.toList());
-    }
 
+    }
 
         @PostMapping("/member/{prefixid}/{name}/{idcard}/{provinceid}/{memtypeid}") //can't save bcz on script on vue page is addmember
         public Member newMember(Member newMember,

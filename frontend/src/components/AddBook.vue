@@ -37,6 +37,17 @@
                     ></v-text-field>
                   </v-col>
 
+                  <v-col cols="12">
+                    <v-text-field
+                            label="จำนวนหนังสือ"
+                            name="name"
+                            type="text"
+                            v-model="amounts"
+                            :rules="[(v) => !!v || 'Please fill in the information']"
+                            required
+                    ></v-text-field>
+                  </v-col>
+
               <v-card-text>
                 <v-form>
                   <v-row>
@@ -72,11 +83,11 @@
                   <v-row>
                     <v-col cols="12">
                       <v-select
-                              label="จำนวนเล่ม"
+                              label="หมวดหมู่หนังสือ"
                               outlined
-                              v-model="numberId"
-                              :items="numbers"
-                              item-text="numberName"
+                              v-model="bookcategoryId"
+                              :items="bookcategorys"
+                              item-text="bookCategoryName"
                               item-value="id"
                               :rules="[(v) => !!v || 'Item is required']"
                               required
@@ -85,12 +96,17 @@
                   </v-row>
                 </v-form>
               </v-card-text>
-              
               <v-card-actions>
                 <v-btn color="error">Clear</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-2" @click="addDocument">บันทึกข้อมูล</v-btn>
               </v-card-actions>
+
+              <v-snackbar v-model="snackbar">
+                 {{ message}}
+                <v-btn text color="primary" @click="snackbar = !snackbar">ปิด</v-btn>
+
+              </v-snackbar>
 
             </v-card>
           </v-flex>
@@ -107,14 +123,18 @@ export default {
   name: "document",
   data() {
     return {
+      snackbar: false,
       booknames: "",
       writternames: "",
+      amounts:"",
       booktypeId:"",
       languageId: "",
-      numberId: "",
+      bookcategoryId: "",
       booktypes:[],
       languages:[],
-      numbers:[]
+      bookcategorys:[],
+      message:''
+
     };
   },
  methods: {                                          //สร้าง method เพื่ออ้างอิงในการรับข้อมูล
@@ -142,6 +162,19 @@ export default {
                 console.log(e);
               });
             },
+            /* eslint-disable no-console */
+             getAmount() {
+              http
+                 .get("/amounts")
+                 .then(response => {
+                 this.amounts= response.data;
+                console.log(response.data);
+                })
+                .catch(e => {
+                console.log(e);
+              });
+            },
+
 
 
     
@@ -170,11 +203,11 @@ export default {
               });
             },
             /* eslint-disable no-console */
-            getNumber() {
+            getBookCategory() {
               http
-                 .get("/number")
+                 .get("/bookcategory")
                  .then(response => {
-                 this.numbers = response.data;
+                 this.bookcategorys = response.data;
                 console.log(response.data);
                 })
                 .catch(e => {
@@ -189,18 +222,24 @@ export default {
           "/document/" + 
           this.booknames + "/" + 
           this.writternames + "/" + 
+          this.amounts + "/" + 
           this.booktypeId + "/" + 
           this.languageId + "/" + 
-          this.numberId,
+          this.bookcategoryId,
           )
 
        .then(response => {
           console.log(response);
-          alert('เพิ่มข้อมูลสำเร็จ');    
+          this.message = "เพิ่มข้อมูลสำเร็จ";    
         })
         .catch(e => {
           console.log(e);
-          alert('ไม่สามารถเพิ่มข้อมูลได้');
+          this.message = "ไม่สามารถเพิ่มข้อมูลได้";
+          })
+          .finally(() =>{
+                        this.snackbar = !this.snackbar;
+                        this.reset();
+          
         });
     },
         },
@@ -208,7 +247,7 @@ export default {
         mounted() { 
             this.getBookType();
             this.getLanguage();
-            this.getNumber();
+            this.getBookCategory();
         }
     };
 </script>

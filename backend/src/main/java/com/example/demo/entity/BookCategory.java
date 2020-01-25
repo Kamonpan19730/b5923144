@@ -12,18 +12,18 @@ import javax.persistence.Entity;
 
 @Entity
 @Data // เข้าใจ getter setter อัตโนมัติ เราจึงไม่สร้างก็ได้
-@Table(name = "language")
+@Table(name = "number")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Language {
+public class BookCategory {
     @Id
-    @SequenceGenerator(name = "language_seq", sequenceName = "language_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "language_seq")
-    @Column(name = "languageId", unique = true, nullable = false)
+    @SequenceGenerator(name = "number_seq", sequenceName = "number_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "number_seq")
+    @Column(name = "numberId", unique = true, nullable = false)
 
     private Long id;
     @NotNull
-    private String languageName;
+    private String bookCategoryName;
 
 }

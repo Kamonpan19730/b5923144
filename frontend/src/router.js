@@ -8,8 +8,9 @@ import AddBook from './components/AddBook'
 import borrow from './components/borrow'
 
 import Remand from './components/Remand'
-import ShowMember from './components/ShowMember'
 
+import ShowMember from './components/ShowMember'
+import home from './components/home'
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -21,7 +22,7 @@ const router = new VueRouter({
             children:[
                 {
                     path: '',
-                    redirect: 'rates'
+                    redirect: 'home'
                 },
                 {
                     path:'remand',
@@ -49,11 +50,17 @@ const router = new VueRouter({
                 {
                     path: 'AddBook',
                     component: AddBook
-                },
+                }
+                ,
                 {
                     path: 'ShowMember',
                     component: ShowMember,
+                },
+                {
+                    path: 'home',
+                    component: home,
                 }
+
 
             ]
 

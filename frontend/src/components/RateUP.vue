@@ -1,8 +1,10 @@
 <template>
     <v-app>
         <v-card class="mx-auto" width="50%">
+               <v-toolbar color="blue darken-2" dark flat>
+                <v-toolbar-title>ระบบลงทะเบียนสมาชิก</v-toolbar-title>
+                </v-toolbar>
             <v-container>
-                <v-card-title class = "display-1">ระบบให้คะแนนการใช้งาน</v-card-title>
                 <v-form ref="form">
                     <v-select
                         v-model="rateup.status"

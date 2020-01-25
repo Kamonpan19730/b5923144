@@ -1,12 +1,31 @@
 package com.example.demo.controller; //กำลังบอกว่า package นี้ เป็นของ Controller
+
 import com.example.demo.entity.*; //import entity ทุกอันมาไว้ในนี้
-import com.example.demo.entity.Number;
-import com.example.demo.repository.*;                     //import repo ทุกอันมาไว้ในนี้
+import com.example.demo.entity.BookCategory;
+import com.example.demo.repository.*;
+import com.fasterxml.jackson.databind.JsonNode;
+
+//import repo ทุกอันมาไว้ในนี้
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.net.URLDecoder;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -21,12 +40,12 @@ class DocumentController{                           //บอกตำแหน�
     @Autowired                                      //สร้างผู้ช่วย ที่คอยสั่ง Repo ให้ทำงานอัตโนมัติ
     private LanguageRepository languageRepository;  
     @Autowired                                      //สร้างผู้ช่วย ที่คอยสั่ง Repo ให้ทำงานอัตโนมัติ
-    private NumberRepository numberRepository;      
+    private BookCategoryRepository bookcategoryRepository;      
     
-    DocumentController(DocumentRepository documentRepository,BookTypeRepository booktypeRepository,LanguageRepository languageRepository,NumberRepository numberRepository) {
+    DocumentController(DocumentRepository documentRepository,BookTypeRepository booktypeRepository,LanguageRepository languageRepository,BookCategoryRepository bookcategoryRepository) {
         this.documentRepository = documentRepository;
         this.booktypeRepository = booktypeRepository;
-        this.numberRepository = numberRepository;
+        this.bookcategoryRepository = bookcategoryRepository;
         this.languageRepository = languageRepository;
     }
 
@@ -35,25 +54,33 @@ class DocumentController{                           //บอกตำแหน�
         return documentRepository.findAll().stream().collect(Collectors.toList());  // ส่งค่าทั้งหมดใน document return ไปแสดงที่หน้า 9000/document โดยส่งทั้งหมดออกไปเป็น list
     }
 
-    @PostMapping("/document/{bookName}/{writterName}/{booktypeID}/{languageID}/{numberID}")
+    @PostMapping("/document/{bookName}/{writterName}/{amount}/{booktypeID}/{languageID}/{bookcategoryID}")
     public Document newDocument( Document newDocument,
     @PathVariable String bookName,
     @PathVariable String writterName,
+    @PathVariable int amount,
+
     @PathVariable long booktypeID,
     @PathVariable long languageID,
-    @PathVariable long numberID ) {
+    @PathVariable long bookcategoryID ,
+    @RequestBody Map<String, String> body) {
         
         System.out.println(">>>>>>>>>>>>>>>>>" + bookName);
         System.out.println(">>>>>>>>>>>>>>>>>" + writterName);
 
         BookType booktype= booktypeRepository.findById(booktypeID);
         Language language = languageRepository.findById(languageID);
-        Number number =  numberRepository.findById(numberID);
+        BookCategory bookcategory =  bookcategoryRepository.findById(bookcategoryID);
 
         
         newDocument.setBookType(booktype);
         newDocument.setLanguage(language);
-        newDocument.setNumber(number);
+        newDocument.setBookCategory(bookcategory);
+        newDocument.setAmount(Integer.valueOf(body.get("amount").toString()));
+        newDocument.setBookName(body.get("bookName"));
+        newDocument.setWritterName(body.get("writterName"));
+  
+       
                                        
         return documentRepository.save(newDocument);
     }

@@ -13,6 +13,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Entity                 //ทำให้ class Document เป็น Entity
 @Data                   //กำหนดให้เก็บข้อมูล และช่วยในการสร้าง get , set
@@ -29,9 +42,20 @@ public class Document { //บอกตำแหน่งปัจจุบัน
     private Long id;    
                                                     //จำกัดการเข้าถึง documentId
     @Column(name="bookName")
-    private @NonNull String bookName;                     
+    @NotNull
+    @Size(min = 2 ,max = 10)
+    private  String bookName = "" ;   
+
     @Column(name="writterName")
-    private @NonNull String writterName;      
+    @NotNull
+    @Size(min = 2 ,max = 20)
+    private @NonNull String writterName = "" ;   
+
+    @Column(name="amount")
+    @NotNull
+    @Max(20)
+    @Min(1)
+    private  int amount;    
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = BookType.class)
     @JoinColumn(name = "booktypeID", insertable = true)
@@ -41,9 +65,11 @@ public class Document { //บอกตำแหน่งปัจจุบัน
     @JoinColumn(name = "languageID", insertable = true)
     private @NonNull Language language;  
    
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Number.class)   
-    @JoinColumn(name = "numberID", insertable = true)
-    private @NonNull Number number;
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = BookCategory.class)   
+    @JoinColumn(name = "bookcategoryID", insertable = true)
+    private @NonNull BookCategory bookCategory;
+
+
 
                            
 }
