@@ -84,6 +84,12 @@
                 <v-btn color="blue darken-2" @click="addRemand">บันทึกข้อมูล</v-btn>
               </v-card-actions>
 
+              <v-snackbar v-model="snackbar">
+                 {{ message}}
+                <v-btn text color="primary" @click="snackbar = !snackbar">ปิด</v-btn>
+
+              </v-snackbar>
+
             </v-card>
           </v-flex>
         </v-responsive>
@@ -99,6 +105,7 @@ export default {
   data() {
     return {          
             //เงื่อนไขในการบันทึกข้อมูล
+             snackbar: false,
         bookStatusId: "",
         typeId: "",
         borrowId:"",
@@ -107,7 +114,8 @@ export default {
       documents:[],
       bookStatus:[],
       bookTypes:[],
-      borrows:[]
+      borrows:[],
+        message:''
 
     };
   },
@@ -166,13 +174,17 @@ export default {
     http
     .post(
         "/remand/" + this.typeId + "/"  + this.borrowId + "/" + this.statusId)
-    .then(response => {
-      console.log(response);
-      alert('เพิ่มข้อมูลสำเร็จ');    
-    })
-    .catch(e => {
-      console.log(e);
-      alert('ไม่สามารถเพิ่มข้อมูลได้ '+ "/remand/" + this.typeId + "/"  + this.borrowId + "/" + this.statusId);
+     .then(response => {
+          console.log(response);
+          this.message = "เพิ่มข้อมูลสำเร็จ";    
+        })
+        .catch(e => {
+          console.log(e);
+          this.message = "ไม่สามารถเพิ่มข้อมูลได้";
+          })
+          .finally(() =>{
+                        this.snackbar = !this.snackbar;
+                        this.reset();
     });
   },
 },

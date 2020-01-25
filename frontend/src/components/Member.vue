@@ -3,21 +3,12 @@
     <center>
       <v-form v-model="valid" ref="form"> 
           <v-card class="mx-auto" max-width="100%">
-                 <v-row>
-                    <v-col>
-                      
-                   
-                     <v-card color="basil">
-                    <v-card-title class="text-center justify-center py-6">
-                   <h1 class="font-weight display-1 basil--text">ระบบลงทะเบียนสมาชิก</h1>
-                   </v-card-title>
-                   </v-card>  
-                    
 
-                    </v-col>
-                  </v-row>
-               
-
+         
+                <v-toolbar color="blue darken-2" dark flat>
+                <v-toolbar-title>ระบบลงทะเบียนสมาชิก</v-toolbar-title>
+                </v-toolbar>
+            
 <v-card-text>
                     <v-row>
                          <v-col cols="12">
@@ -108,11 +99,11 @@
                 
                 <v-card-actions>
                   
-                    <v-btn @click="saveMember" :class="{ yellow: !valid, green: valid }" color="primary">บันทึกข้อมูล</v-btn>&nbsp;&nbsp;&nbsp;
+                  <v-btn color="primary" @click="saveMember">บันทึกข้อมูล</v-btn>
                        
                         <v-spacer></v-spacer>
 
-                    <v-btn color="error" to="/ShowMember">แสดงรายชื่อผู้ลงทะเบียนสมาชิก</v-btn>
+                 <v-btn color="error" to="/ShowMember">แสดงรายชื่อผู้ลงทะเบียนสมาชิก</v-btn>
                     
               </v-card-actions>
                   
@@ -122,10 +113,10 @@
 
                      
       </v-form>
-    <v-snackbar v-model="snackbar">
-                  {{ text }}
-                  <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
-                </v-snackbar>
+      <v-snackbar v-model="snackbar">
+                  {{ message }}
+                <v-btn text color="red" @click="snackbar = !snackbar">ปิด</v-btn>
+              </v-snackbar>
    </center>
     
 </template>
@@ -141,6 +132,7 @@
         name: "Member",
          data() {
     return {
+      snackbar: false,
       Member:{
         prefixid: "",
         name: "",
@@ -154,6 +146,9 @@
   },
 methods: {
    /* eslint-disable */
+    reset: function () {
+            this.$refs.form.reset();
+        },
     getPrefix(){
       http
         .get("/prefix")
@@ -211,19 +206,25 @@ methods: {
             this.Member.memtypeid,
           this.Member
         )
-    .then(response => {
-          console.log(response);
-          this.text = "เพิ่มข้อมูลสำเร็จ"
-          this.snackbar = !this.snackbar  
+     .then(response => {
+          console.log(response); 
+          this.message = "เพิ่มข้อมูลสำเร็จ";
         })
-       .catch(e => {
+        .catch(e => {
           console.log(e);
-          this.text = "ไม่สามารถเพิ่มข้อมูลได้"
-          this.snackbar = !this.snackbar
+          this.message = "เพิ่มข้อมูลไม่สำเร็จ"
         })
-      this.submitted = true;
+       .finally(() => {
+                    this.snackbar = !this.snackbar;
+                    this.reset();
+          });
      
     },
+     refreshList() {
+      this.getPrefix();
+      this.getProvince();
+      this.getMemtype();
+    }
    
   },
     mounted() {
@@ -249,7 +250,7 @@ methods: {
     }
     
   .v-btn{
-      background-color:rgb(8, 8, 8)
+      background-color:rgb(250, 250, 250)
   }
 
 .basil {

@@ -15,7 +15,7 @@
               </v-toolbar>
 
               <v-card-text>
-                <v-form>
+                <v-form ref ="form">
                   <v-row>
                     <v-col cols="12">
                       <v-select
@@ -74,9 +74,20 @@
 
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-btn color="blue darken-2" @click="saveVideo">บันทึกข้อมูล</v-btn>
+            <v-card-actions>
+                  
+                  <v-btn color="primary" @click="saveMember">บันทึกข้อมูล</v-btn>
+                       
+                        <v-spacer></v-spacer>
+
+                 <v-btn color="error" to="/ShowMember">แสดงรายชื่อผู้ลงทะเบียนสมาชิก</v-btn>
+                    
               </v-card-actions>
+
+              <v-snackbar v-model="snackbar">
+                  {{ message }}
+                <v-btn text color="primary" @click="snackbar = !snackbar">ปิด</v-btn>
+              </v-snackbar>
 
             </v-card>
           </v-flex>
@@ -93,6 +104,7 @@ export default {
   name: "video",
   data() {
     return {
+      snackbar: false,
       video: {
         librarianid: "",
         videoName:"",
@@ -102,11 +114,15 @@ export default {
       librarian:[],
       type:[],
       category:[],
+      message: ''
     };
   },
   methods: {
     /* eslint-disable no-console */
      /* eslint-disable */
+     reset: function () {
+            this.$refs.form.reset();
+        },
     getCreateLibrarian() {
       http
         .get("/librarian")
@@ -166,13 +182,17 @@ export default {
             this.video
         )
         .then(response => {
-          console.log(response);
-          alert('เพิ่มข้อมูลสำเร็จ');    
+          console.log(response); 
+          this.message = "เพิ่มข้อมูลสำเร็จ";
         })
         .catch(e => {
           console.log(e);
-          alert('ไม่สามารถเพิ่มข้อมูลได้');
-        });
+          this.message = "เพิ่มข้อมูลไม่สำเร็จ"
+        })
+        .finally(() => {
+                    this.snackbar = !this.snackbar;
+                    this.reset();
+          });
     },
     refreshList() {
       this.getCreateLibrarian();
@@ -181,7 +201,7 @@ export default {
     }
   },
   mounted() {
-    this.getCreateLibrarian();
+      this.getCreateLibrarian();
       this.getCreatType();
       this.getCreatCategory();
   }

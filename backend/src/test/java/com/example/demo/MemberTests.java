@@ -1,161 +1,314 @@
-// package com.example.demo;
+package com.example.demo;
 
-// import static org.junit.Assert.assertEquals;
+import com.example.demo.entity.*;
+import com.example.demo.repository.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
 
-// import java.util.Date;
-// import java.util.Optional;
-// import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import javax.validation.constraints.Pattern;
+import java.util.Optional;
+import java.util.Set;
 
-// import javax.validation.ConstraintViolation;
-// import javax.validation.Validation;
-// import javax.validation.Validator;
-// import javax.validation.ValidatorFactory;
-
-// import com.example.demo.entity.*;
-
-// import com.example.demo.repository.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-// import org.junit.After;
-// import org.junit.Before;
-// import org.junit.Test;
-// import org.junit.runner.RunWith;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.test.context.junit4.SpringRunner;
+@DataJpaTest
+public class MemberTests {
 
-// @DataJpaTest
-// // @SpringBootTest
-// @RunWith(SpringRunner.class)
-// public class MemberTests {
-//     private Validator validator;
-//     @Autowired
-//     private MemberRepository memberRepository;
+    private Validator validator;
 
-//     @Autowired
-//     private MemtypeRepository memtypeRepository;
+    @Autowired
+    private MemberRepository memberRepository;
 
-//     @Autowired
-//     private PrefixRepository prefixRepository;
+    @Autowired
+    private ProvinceRepository provinceRepository;
 
-//     @Autowired
-//     private ProvinceRepository provinceRepository;
+    @Autowired
+    private PrefixRepository prefixRepository;
 
-//     private Member member;
-//     private Memtype memtype;
-//     private Prefix prefix;
-//     private Province province;
+    @Autowired
+    private MemtypeRepository memtypeRepository;
 
-//     @Before
-//     public void setup() {
-//         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-//         validator = factory.getValidator();
+    @BeforeEach
+    public void setup() {
+        final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
-//         prefix = Prefix.builder().prefix("Dr.").build();
-//         prefix = prefixRepository.saveAndFlush(prefix);
+    @Test
+    void testIdCardMustNotBeNull() {
+        Member member= new Member();
 
-//         province = Province.builder().province("Bangkok").build();
-//         province = provinceRepository.saveAndFlush(province);
+        Province province = new Province();
+        province.setProvince("ชัยภูมิ");
+        province = provinceRepository.saveAndFlush(province);
 
-//         memtype = Memtype.builder().memtype("Government").build();
-//         memtype = memtypeRepository.saveAndFlush(memtype);
+        Prefix prefix = new Prefix();
+        prefix.setPrefix("เด็กชาย");
+        prefix = prefixRepository.saveAndFlush(prefix);
 
-//         member = Member.builder().idcard("ASD123").memtype(memtype).name("Paknahee").prefix(prefix).province(province)
-//                 .build();
-//         member = memberRepository.saveAndFlush(member);
+        Memtype memtype = new Memtype();
+        memtype.setMemtype("นักศึกษา");
+        memtype = memtypeRepository.saveAndFlush(memtype);
+
+        member.setIdcard(null);
+        member.setName("ABC");
+        member.setProvince(province);
+        member.setPrefix(prefix);
+        member.setMemtype(memtype);
+
+        Set<ConstraintViolation<Member>> result = validator.validate(member);
+
+        assertEquals(1, result.size());
+
+        ConstraintViolation<Member> violation = result.iterator().next();
+        assertEquals("idcard Must Not Be Null", violation.getMessage());
+        assertEquals("idcard", violation.getPropertyPath().toString());
+    }
+ 
+    @Test
+    void testMemtypeMustNotBeNull() {
+        Memtype memtype = new Memtype();
+        memtype.setMemtype(null);
+      
+
+        Set<ConstraintViolation<Memtype>> result = validator.validate(memtype);
+        assertEquals(1, result.size());
+
+        ConstraintViolation<Memtype> violation = result.iterator().next();
+        assertEquals("memtype Must Not Be Null", violation.getMessage());
+        assertEquals("memtype", violation.getPropertyPath().toString());
+    }
+    
+    @Test
+    void testPrefixMustNotBeNull() {
+        Prefix prefix = new Prefix();
+        prefix.setPrefix(null);
+      
+
+        Set<ConstraintViolation<Prefix>> result = validator.validate(prefix);
+        assertEquals(1, result.size());
+
+        ConstraintViolation<Prefix> violation = result.iterator().next();
+        assertEquals("prefix Must Not Be Null", violation.getMessage());
+        assertEquals("prefix", violation.getPropertyPath().toString());
+    }
+   
+   
+    @Test
+    void testProvinceMustNotBeNull() {
+        Province province = new Province();
+        province.setProvince(null);
+      
+
+        Set<ConstraintViolation<Province>> result = validator.validate(province);
+        assertEquals(1, result.size());
+
+        ConstraintViolation<Province> violation = result.iterator().next();
+        assertEquals("province Must Not Be Null", violation.getMessage());
+        assertEquals("province", violation.getPropertyPath().toString());
+    }
+
+
+    @Test
+    void testIDcardOKWith13Digits() {
+        Member member= new Member();
+
+        Province province = new Province();
+        province.setProvince("ชัยภูมิ");
+        province = provinceRepository.saveAndFlush(province);
+
+        Prefix prefix = new Prefix();
+        prefix.setPrefix("เด็กชาย");
+        prefix = prefixRepository.saveAndFlush(prefix);
+
+        Memtype memtype = new Memtype();
+        memtype.setMemtype("นักศึกษา");
+        memtype = memtypeRepository.saveAndFlush(memtype);
+
+        member.setIdcard("1234567890123");
+        member.setName("ABC");
+        member.setProvince(province);
+        member.setPrefix(prefix);
+        member.setMemtype(memtype);
+
+        member = memberRepository.saveAndFlush(member);
+
+        Optional<Member> found = memberRepository.findById(member.getMemberid());
+        assertEquals("1234567890123", found.get().getIdcard());
+    }
+
+
+    // @Test
+    // void testIDcardMustBeUnique() {
+    //     Member member= new Member();
+
+    //     Province province = new Province();
+    //     province.setProvince("ชัยภูมิ");
+    //     province = provinceRepository.saveAndFlush(province);
+
+    //     Prefix prefix = new Prefix();
+    //     prefix.setPrefix("เด็กชาย");
+    //     prefix = prefixRepository.saveAndFlush(prefix);
+
+    //     Memtype memtype = new Memtype();
+    //     memtype.setMemtype("นักศึกษา");
+    //     memtype = memtypeRepository.saveAndFlush(memtype);
+
+    //     member.setIdcard("1234567890123");
+    //     member.setName("ABC");
+    //     member.setProvince(province);
+    //     member.setPrefix(prefix);
+    //     member.setMemtype(memtype);
+
+    //     member = memberRepository.saveAndFlush(member);
+
+    //     assertThrows(DataIntegrityViolationException.class, () -> {
+    //         // สร้าง person object ตัวที่ 2
+    //         Member member2 = new Member();
+
+    //     Province province2 = new Province();
+    //     province2.setProvince("ชัยภูมิ");
+    //     province2 = provinceRepository.saveAndFlush(province2);
+
+    //     Prefix prefix2 = new Prefix();
+    //     prefix2.setPrefix("เด็กชาย");
+    //     prefix2 = prefixRepository.saveAndFlush(prefix2);
+
+    //     Memtype memtype2 = new Memtype();
+    //     memtype2.setMemtype("นักศึกษา");
+    //     memtype2 = memtypeRepository.saveAndFlush(memtype2);
+
+    //     member2.setIdcard("1234567890123");
+    //     member2.setName("ABC");
+    //     member2.setProvince(province2);
+    //     member2.setPrefix(prefix2);
+    //     member2.setMemtype(memtype2);
+
+    //     member2 = memberRepository.saveAndFlush(member2);
+    //     });
+
+
+
+
+
 
     
-//     }
-
-//     @After
-//     public void destroy() {
-//         prefixRepository.deleteAll();
-//         provinceRepository.deleteAll();
-//         memtypeRepository.deleteAll();
-//         memberRepository.deleteAll();    
-//     }
-
-//     @Test
-//     public void B5923403_borrowShouldBeOK() {
-//         Member member = Member.builder().member(member).memtype(memtype).build();
-//         member = memberRepository.saveAndFlush(member);
-
-//         Optional<Borrow> found = memberRepository.findById(member.getMemberID());
-    
-       
-//         assertEquals("Dr.", found.get().getMember().getPrefix().getPrefix());
-//         assertEquals("Bangkok", found.get().getMember().getProvince().getProvince());
-//         assertEquals("Government", found.get().getMemtype().getMemtype());
-//         assertEquals("ASD123", found.get().getMember().getIdcard());
-//         assertEquals("Paknahee", found.get().getMember().getName());
-//     }
-
-//     // @Test
-//     // public void B5923403_memberMustBeNotNull() {
-//     //     Borrow borrow = Borrow.builder().Descripton("Hentai Comic").bookType(bookType).borrowDate(new Date())
-//     //             .document(document).member(null).memtype(memType).numbers(1L).tell("0987451150").build();
-
-//     //     Set<ConstraintViolation<Borrow>> result = validator.validate(borrow);
-//     //     assertEquals(1, result.size());
-//     //     ConstraintViolation<Borrow> violation = result.iterator().next();
-//     //     assertEquals("member must be not null", violation.getMessage());
-//     //     assertEquals("member", violation.getPropertyPath().toString());
-//     // }
-
-//     // @Test
-//     // public void B5923403_descriptionMustBeMax25Character() {
-//     //     Borrow borrow = Borrow.builder().Descripton("abcdefghijklmnopqrstuvwxyz").bookType(bookType)
-//     //             .borrowDate(new Date()).document(document).member(member).memtype(memType).numbers(1L)
-//     //             .tell("0987451150").build();
-
-//     //     Set<ConstraintViolation<Borrow>> result = validator.validate(borrow);
-//     //     assertEquals(1, result.size());
-//     //     ConstraintViolation<Borrow> violation = result.iterator().next();
-//     //     assertEquals("description must be max 25 characters", violation.getMessage());
-//     //     assertEquals("Descripton", violation.getPropertyPath().toString());
-//     // }
-
-//     // @Test
-//     // public void B5923403_tellMustBeNumber() {
-//     //     Borrow borrow = Borrow.builder().Descripton("Hentai Comic").bookType(bookType).borrowDate(new Date())
-//     //             .document(document).member(member).memtype(memType).numbers(1L).tell("asdfghjklm").build();
-
-//     //     Set<ConstraintViolation<Borrow>> result = validator.validate(borrow);
-//     //     assertEquals(1, result.size());
-//     //     ConstraintViolation<Borrow> violation = result.iterator().next();
-//     //     assertEquals("tell must be digit and 10 characters", violation.getMessage());
-//     //     assertEquals("tell", violation.getPropertyPath().toString());
-//     // }
-
-//     // @Test
-//     // public void B5923403_tellMustNot11Characters() {
-//     //     Borrow borrow = Borrow.builder().Descripton("Hentai Comic").bookType(bookType).borrowDate(new Date())
-//     //             .document(document).member(member).memtype(memType).numbers(1L).tell("09632587412").build();
-
-//     //     Set<ConstraintViolation<Borrow>> result = validator.validate(borrow);
-//     //     assertEquals(1, result.size());
-//     //     ConstraintViolation<Borrow> violation = result.iterator().next();
-//     //     assertEquals("tell must be digit and 10 characters", violation.getMessage());
-//     //     assertEquals("tell", violation.getPropertyPath().toString());
-//     // }
-
-
-//     // @Test
-//     // public void B5923403_tellMustNot9Characters() {
-//     //     Borrow borrow = Borrow.builder().Descripton("Hentai Comic").bookType(bookType).borrowDate(new Date())
-//     //             .document(document).member(member).memtype(memType).numbers(1L).tell("096325874").build();
-
-//     //     Set<ConstraintViolation<Borrow>> result = validator.validate(borrow);
-//     //     assertEquals(1, result.size());
-//     //     ConstraintViolation<Borrow> violation = result.iterator().next();
-//     //     assertEquals("tell must be digit and 10 characters", violation.getMessage());
-//     //     assertEquals("tell", violation.getPropertyPath().toString());
-//     // }
 
 
 
 
+        @Test
+    void testIDcardMustNotBe14Digits() {
+        Member member= new Member();
+
+        Province province = new Province();
+        province.setProvince("ชัยภูมิ");
+        province = provinceRepository.saveAndFlush(province);
+
+        Prefix prefix = new Prefix();
+        prefix.setPrefix("เด็กชาย");
+        prefix = prefixRepository.saveAndFlush(prefix);
+
+        Memtype memtype = new Memtype();
+        memtype.setMemtype("นักศึกษา");
+        memtype = memtypeRepository.saveAndFlush(memtype);
+
+        member.setIdcard("12345678901234");
+        member.setName("ABC");
+        member.setProvince(province);
+        member.setPrefix(prefix);
+        member.setMemtype(memtype);
+
+        Set<ConstraintViolation<Member>> result = validator.validate(member);
+
+        // result ต้องมี error 1 ค่าเท่านั้น
+        assertEquals(1, result.size());
+
+        // error message ตรงชนิด และถูก field
+        ConstraintViolation<Member> v = result.iterator().next();
+
+        assertEquals("idcard Must Have 13 digits", v.getMessage());
+        assertEquals("idcard", v.getPropertyPath().toString());
+    }
+
+
+    @Test
+    void testIDcardMustNotBe12Digits() {
+        Member member= new Member();
+
+        Province province = new Province();
+        province.setProvince("ชัยภูมิ");
+        province = provinceRepository.saveAndFlush(province);
+
+        Prefix prefix = new Prefix();
+        prefix.setPrefix("เด็กชาย");
+        prefix = prefixRepository.saveAndFlush(prefix);
+
+        Memtype memtype = new Memtype();
+        memtype.setMemtype("นักศึกษา");
+        memtype = memtypeRepository.saveAndFlush(memtype);
+
+        member.setIdcard("123456789012");
+        member.setName("ABC");
+        member.setProvince(province);
+        member.setPrefix(prefix);
+        member.setMemtype(memtype);
+
+        Set<ConstraintViolation<Member>> result = validator.validate(member);
+
+        // result ต้องมี error 1 ค่าเท่านั้น
+        assertEquals(1, result.size());
+
+        // error message ตรงชนิด และถูก field
+        ConstraintViolation<Member> v = result.iterator().next();
+
+        assertEquals("idcard Must Have 13 digits", v.getMessage());
+        assertEquals("idcard", v.getPropertyPath().toString());
+    }
+
+
+
+    @Test
+    void testNameMustNotBeNull() {
+        Member member= new Member();
+
+        Province province = new Province();
+        province.setProvince("ชัยภูมิ");
+        province = provinceRepository.saveAndFlush(province);
+
+        Prefix prefix = new Prefix();
+        prefix.setPrefix("เด็กชาย");
+        prefix = prefixRepository.saveAndFlush(prefix);
+
+        Memtype memtype = new Memtype();
+        memtype.setMemtype("นักศึกษา");
+        memtype = memtypeRepository.saveAndFlush(memtype);
+
+        member.setIdcard("1234567890123");
+        member.setName(null);
+        member.setProvince(province);
+        member.setPrefix(prefix);
+        member.setMemtype(memtype);
+
+        Set<ConstraintViolation<Member>> result = validator.validate(member);
+
+        assertEquals(1, result.size());
+
+        ConstraintViolation<Member> violation = result.iterator().next();
+        assertEquals("Name Must Not Be Null", violation.getMessage());
+        assertEquals("name", violation.getPropertyPath().toString());
+    }
+ 
+}
 
 
 
@@ -170,48 +323,7 @@
 
 
 
-//     // @Test
-//     // public void b5923403_testNotnull() {
 
-//     // Borrow borrow =
-//     // Borrow.builder().numbers(null).Descripton("abcdefghijklmnopqrstuvwxy")
-//     // .borrowDate(new Date())
 
-//     // .tell("0812345678").build();
 
-//     // Set<ConstraintViolation<Borrow>> result = validator.validate(borrow);
-//     // assertEquals(1, result.size());
-//     // ConstraintViolation<Borrow> violation = result.iterator().next();
-//     // assertEquals("Notnull", violation.getMessage());
-//     // assertEquals("numbers", violation.getPropertyPath().toString());
-//     // }
 
-//     // @Test
-//     // public void b5923403_testSize() {
-
-//     // Borrow borrow =
-//     // Borrow.builder().numbers(1L).Descripton("abcdefghijklmnopqrstuvwxyz").borrowDate(new
-//     // Date())
-//     // .tell("0812345678").build();
-//     // Set<ConstraintViolation<Borrow>> result = validator.validate(borrow);
-//     // assertEquals(1, result.size());
-//     // ConstraintViolation<Borrow> violation = result.iterator().next();
-//     // assertEquals("Joe", violation.getMessage());
-//     // assertEquals("Descripton", violation.getPropertyPath().toString());
-//     // }
-
-//     // @Test
-//     // public void b5923403_testPattern() {
-
-//     // Borrow borrow =
-//     // Borrow.builder().numbers(1L).Descripton("abcdefghijklmnopqrstuvwxy").borrowDate(new
-//     // Date())
-//     // .tell("01234").build();
-//     // Set<ConstraintViolation<Borrow>> result = validator.validate(borrow);
-//     // assertEquals(1, result.size());
-//     // ConstraintViolation<Borrow> violation = result.iterator().next();
-//     // assertEquals("error", violation.getMessage());
-//     // assertEquals("tell", violation.getPropertyPath().toString());
-//     // }
-
-// }

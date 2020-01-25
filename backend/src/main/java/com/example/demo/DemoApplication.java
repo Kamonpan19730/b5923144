@@ -10,7 +10,7 @@ import com.example.demo.repository.TypeRepository;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.entity.*;
 import com.example.demo.entity.Type;
-import com.example.demo.entity.Number;
+import com.example.demo.entity.BookCategory;
 import com.example.demo.entity.Category;
 import com.example.demo.entity.Librarian;
 
@@ -34,7 +34,7 @@ public class DemoApplication {
 						ProvinceRepository provinceRepository,
 						BookTypeRepository booktypeRepository,
 						LanguageRepository languageRepository,
-						NumberRepository numberRepository,
+						BookCategoryRepository bookcategoryRepository,
 						BookStatusRepository bookStatusRepository){
 	
 		return args -> {
@@ -67,7 +67,7 @@ public class DemoApplication {
 	});
     Stream.of("นิทาน", "การ์ตูน", 
                   "สารคดี", "ประวัติศาสตร์", 
-                  "ความรู้ทั่วไป", "นิยาย","วารสาร","นิตยสาร","วิทยาศาสตร์","สังคมศาสตร์")
+                  "ความรู้ทั่วไป", "นิยาย","หนังสือเด็ก","","วิทยาศาสตร์","สังคมศาสตร์")
                     .forEach(booktypeName -> {
                     BookType booktype = new BookType();
                     booktype.setBookTypeName(booktypeName);
@@ -84,18 +84,13 @@ public class DemoApplication {
                     languageRepository.save(language); 
         });
 
-        Stream.of("1 เล่ม", "2 เล่ม", 
-                  "3 เล่ม", "4 เล่ม", 
-                  "5 เล่ม", "6 เล่ม", 
-				  "7 เล่ม", "8 เล่ม",
-				  "9 เล่ม ","10 เล่ม",
-				  "11 เล่ม" ,"12 เล่ม" ,
-				  "13 เล่ม" ,"14 เล่ม" ,
-				  "15 เล่ม"  )
-                  .forEach(numberName -> {
-                  Number number = new Number();
-                  number.setNumberName(numberName);
-                  numberRepository.save(number);
+        Stream.of("หนังสือ", "นิตยสาร", 
+                  "หนังสือพิมพ์", "บทความ"
+                   )
+                  .forEach(bookCategoryName -> {
+                  BookCategory bookcategory = new BookCategory();
+                  bookcategory.setBookCategoryName(bookCategoryName);
+                  bookcategoryRepository.save(bookcategory);
         });
 
 
