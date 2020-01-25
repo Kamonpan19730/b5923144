@@ -4,6 +4,7 @@ import lombok.*;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
@@ -22,7 +23,10 @@ public class Type {
     @SequenceGenerator(name="type_seq",sequenceName="type_seq")               
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="type_seq")  
     @Column(name = "TYPE_ID", unique = true, nullable = true)
-    private @NonNull Long typeid;
-    private @NonNull String type;
+    @NonNull
+    private Long typeid;
+
+    @NotNull(message = "Type Must Not Be Null")
+    private String type;
 
 }

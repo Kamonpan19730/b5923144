@@ -22,10 +22,25 @@ public class BookType {
     @Id
     @SequenceGenerator(name = "booktype_seq", sequenceName = "booktype_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "booktype_seq")
-    @Column(name = "booktypeId", unique = true, nullable = false)
+    @Column(name = "booktypeId", unique = true)
+    private @NotNull Long id;
+    private @NotNull String bookTypeName;
 
-    private Long id;
-    @NotNull
-    private String bookTypeName;
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public String getBookTypeName() {
+        return this.bookTypeName;
+    }
+
+    public void setBookTypeName(String bookTypeName) {
+        this.bookTypeName = bookTypeName;
+    }
 
 }

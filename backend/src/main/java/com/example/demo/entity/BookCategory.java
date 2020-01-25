@@ -12,18 +12,34 @@ import javax.persistence.Entity;
 
 @Entity
 @Data // เข้าใจ getter setter อัตโนมัติ เราจึงไม่สร้างก็ได้
-@Table(name = "number")
+@Table(name = "bookcategory")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookCategory {
     @Id
-    @SequenceGenerator(name = "number_seq", sequenceName = "number_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "number_seq")
-    @Column(name = "numberId", unique = true, nullable = false)
+    @SequenceGenerator(name = "bookcategory_seq", sequenceName = "bookcategory_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookcategory_seq")
+    @Column(name = "bookcategoryId", unique = true)
 
-    private Long id;
-    @NotNull
-    private String bookCategoryName;
+    private @NotNull Long id;
+    private @NotNull String bookCategoryName;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public String getBookCategoryName() {
+        return this.bookCategoryName;
+    }
+
+    public void setBookCategoryName(String bookCategoryName) {
+        this.bookCategoryName = bookCategoryName;
+    }
 
 }

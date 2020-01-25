@@ -48,10 +48,11 @@ public class VideoController {
         return videoRepository.findAll().stream().collect(Collectors.toList());
     }
 
-    @PostMapping("/addVideo/{librarianid}/{videoName}/{typeid}/{categoryid}")
+    @PostMapping("/addVideo/{librarianid}/{videoName}/{videoCode}/{typeid}/{categoryid}")
         public Video newVideo(Video newVideo,
                                   @PathVariable long librarianid,
                                   @PathVariable String videoName,
+                                  @PathVariable String videoCode,
                                   @PathVariable long typeid,
                                   @PathVariable long categoryid) {
                                       
@@ -62,6 +63,7 @@ public class VideoController {
 
             newVideo.setLibrarian(librarian);
             newVideo.setVideoName(videoName);
+            newVideo.setVideoName(videoCode);
             newVideo.setType(type);
             newVideo.setCategory(category);
             

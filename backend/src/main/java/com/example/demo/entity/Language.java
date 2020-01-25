@@ -20,10 +20,26 @@ public class Language {
     @Id
     @SequenceGenerator(name = "language_seq", sequenceName = "language_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "language_seq")
-    @Column(name = "languageId", unique = true, nullable = false)
+    @Column(name = "languageId", unique = true)
 
-    private Long id;
-    @NotNull
-    private String languageName;
+    private @NotNull Long id;
+    private @NotNull String languageName;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public String getLanguageName() {
+        return this.languageName;
+    }
+
+    public void setLanguageName(String languageName) {
+        this.languageName = languageName;
+    }
 
 }

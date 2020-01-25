@@ -58,12 +58,11 @@ class DocumentController{                           //บอกตำแหน�
     public Document newDocument( Document newDocument,
     @PathVariable String bookName,
     @PathVariable String writterName,
-    @PathVariable int amount,
+    @PathVariable Integer amount,
 
     @PathVariable long booktypeID,
     @PathVariable long languageID,
-    @PathVariable long bookcategoryID ,
-    @RequestBody Map<String, String> body) {
+    @PathVariable long bookcategoryID) {
         
         System.out.println(">>>>>>>>>>>>>>>>>" + bookName);
         System.out.println(">>>>>>>>>>>>>>>>>" + writterName);
@@ -76,9 +75,9 @@ class DocumentController{                           //บอกตำแหน�
         newDocument.setBookType(booktype);
         newDocument.setLanguage(language);
         newDocument.setBookCategory(bookcategory);
-        newDocument.setAmount(Integer.valueOf(body.get("amount").toString()));
-        newDocument.setBookName(body.get("bookName"));
-        newDocument.setWritterName(body.get("writterName"));
+        newDocument.setAmount(amount);
+        newDocument.setBookName(bookName);
+        newDocument.setWritterName(writterName);
   
        
                                        

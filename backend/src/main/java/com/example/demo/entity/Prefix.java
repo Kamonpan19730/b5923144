@@ -27,7 +27,7 @@ public class Prefix {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "prefix_seq")
   @Column(name = "prefix_ID", unique = true, nullable = true)
   private Long prefixid;
-  @NotNull(message = "prefix Must Not Be Null")
+  @NotNull
   private String prefix;
 
 }
